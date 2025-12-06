@@ -4,8 +4,11 @@
 		<Items>
 			<Item Name="Caption" Value="Yacht form page" />
 			<Item Name="LocalizableStrings.addRecord_66g9e6n_caption.Value" Value="Add new" />
+			<Item Name="LocalizableStrings.addRecord_6qejj7v_caption.Value" Value="Add new" />
 			<Item Name="LocalizableStrings.addRecord_94uk93g_caption.Value" Value="Add new" />
+			<Item Name="LocalizableStrings.addRecord_h1i5u14_caption.Value" Value="Add new" />
 			<Item Name="LocalizableStrings.addRecord_rncn9v0_caption.Value" Value="Add new" />
+			<Item Name="LocalizableStrings.PushMeButton_caption.Value" Value="Push me!" />
 		</Items>
 	</Group>
 </Resources>
