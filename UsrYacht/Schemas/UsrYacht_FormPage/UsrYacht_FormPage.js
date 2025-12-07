@@ -112,6 +112,29 @@ define("UsrYacht_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEM
 			},
 			{
 				"operation": "insert",
+				"name": "TicketPrice",
+				"values": {
+					"layoutConfig": {
+						"column": 1,
+						"colSpan": 1,
+						"row": 4,
+						"rowSpan": 1
+					},
+					"type": "crt.NumberInput",
+					"label": "$Resources.Strings.PDS_UsrTicketPrice_3rm22wa",
+					"control": "$PDS_UsrTicketPrice_3rm22wa",
+					"readonly": true,
+					"placeholder": "",
+					"labelPosition": "auto",
+					"tooltip": "",
+					"visible": false
+				},
+				"parentName": "SideAreaProfileContainer",
+				"propertyName": "items",
+				"index": 3
+			},
+			{
+				"operation": "insert",
 				"name": "DriveType",
 				"values": {
 					"layoutConfig": {
@@ -243,7 +266,7 @@ define("UsrYacht_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEM
 			},
 			{
 				"operation": "insert",
-				"name": "Comment",
+				"name": "EmailInput_43ueffu",
 				"values": {
 					"layoutConfig": {
 						"column": 2,
@@ -251,15 +274,16 @@ define("UsrYacht_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEM
 						"row": 3,
 						"rowSpan": 1
 					},
-					"type": "crt.Input",
-					"label": "$Resources.Strings.PDS_UsrComment_y2bwejd",
-					"control": "$PDS_UsrComment_y2bwejd",
+					"type": "crt.EmailInput",
+					"label": "#ResourceString(EmailInput_43ueffu_label)#",
+					"control": "$PDS_UsrManagerEmail_itas8ou",
+					"labelPosition": "auto",
 					"placeholder": "",
 					"tooltip": "",
-					"readonly": false,
-					"multiline": false,
-					"labelPosition": "auto",
-					"visible": false
+					"needHandleSave": false,
+					"caption": "#ResourceString(EmailInput_43ueffu_caption)#",
+					"readonly": true,
+					"visible": true
 				},
 				"parentName": "GeneralInfoTabContainer",
 				"propertyName": "items",
@@ -296,6 +320,30 @@ define("UsrYacht_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEM
 			},
 			{
 				"operation": "insert",
+				"name": "Comment",
+				"values": {
+					"layoutConfig": {
+						"column": 2,
+						"colSpan": 1,
+						"row": 4,
+						"rowSpan": 1
+					},
+					"type": "crt.Input",
+					"label": "$Resources.Strings.PDS_UsrComment_y2bwejd",
+					"control": "$PDS_UsrComment_y2bwejd",
+					"placeholder": "",
+					"tooltip": "",
+					"readonly": false,
+					"multiline": false,
+					"labelPosition": "auto",
+					"visible": false
+				},
+				"parentName": "GeneralInfoTabContainer",
+				"propertyName": "items",
+				"index": 7
+			},
+			{
+				"operation": "insert",
 				"name": "City",
 				"values": {
 					"layoutConfig": {
@@ -320,7 +368,7 @@ define("UsrYacht_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEM
 				},
 				"parentName": "GeneralInfoTabContainer",
 				"propertyName": "items",
-				"index": 7
+				"index": 8
 			}
 		]/**SCHEMA_VIEW_CONFIG_DIFF*/,
 		viewModelConfigDiff: /**SCHEMA_VIEW_MODEL_CONFIG_DIFF*/[
@@ -431,6 +479,16 @@ define("UsrYacht_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEM
 								]
 							}
 						}
+					},
+					"PDS_UsrTicketPrice_3rm22wa": {
+						"modelConfig": {
+							"path": "PDS.UsrTicketPrice"
+						}
+					},
+					"PDS_UsrManagerEmail_itas8ou": {
+						"modelConfig": {
+							"path": "PDS.UsrManagerEmail_itas8ou"
+						}
 					}
 				}
 			},
@@ -463,7 +521,13 @@ define("UsrYacht_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEM
 					"PDS": {
 						"type": "crt.EntityDataSource",
 						"config": {
-							"entitySchemaName": "UsrYacht"
+							"entitySchemaName": "UsrYacht",
+							"attributes": {
+								"UsrManagerEmail_itas8ou": {
+									"path": "UsrManager.Email",
+									"type": "ForwardReference"
+								}
+							}
 						},
 						"scope": "page"
 					}
@@ -480,6 +544,21 @@ define("UsrYacht_FormPage", /**SCHEMA_DEPS*/[]/**SCHEMA_DEPS*/, function/**SCHEM
 					var price = await request.$context.PDS_UsrPrice_oufi39s;
 					console.log("Price = " + price);
 					request.$context.PDS_UsrComment_y2bwejd = "comment from JS code!";
+					/* Call the next handler if it exists and return its result. */
+					return next?.handle(request);
+				}
+			},
+			{
+				request: "crt.HandleViewModelAttributeChangeRequest",
+				/* The custom implementation of the system query handler. */
+				handler: async (request, next) => {
+      				if (request.attributeName === 'PDS_UsrPrice_oufi39s' || 		        // if price changed
+					   request.attributeName === 'PDS_UsrPassengersCount_il6165e' ) { 		// or Passengers count changed
+						let price = await request.$context.PDS_UsrPrice_oufi39s;
+						let passengers = await request.$context.PDS_UsrPassengersCount_il6165e;
+						let ticket_price = price / passengers;
+						request.$context.PDS_UsrTicketPrice_3rm22wa = ticket_price;
+					}
 					/* Call the next handler if it exists and return its result. */
 					return next?.handle(request);
 				}
