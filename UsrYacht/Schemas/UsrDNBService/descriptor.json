@@ -1,0 +1,10 @@
+﻿{
+  "Descriptor": {
+    "UId": "18b21cde-8c18-4ed2-907b-31ec461c1c83",
+    "Name": "UsrDNBService",
+    "ModifiedOnUtc": "\/Date(1765269386000)\/",
+    "ManagerName": "ServiceSchemaManager",
+    "Caption": "https://api.service.dnb.com",
+    "DependsOn": []
+  }
+}
